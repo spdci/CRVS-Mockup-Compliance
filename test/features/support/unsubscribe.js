@@ -1,7 +1,7 @@
 import chai from 'chai';
 import pkg from 'pactum';
 const { spec } = pkg;
-import { Given, When, Then, Before } from '@cucumber/cucumber';
+import { Given, When, Then } from '@cucumber/cucumber';
 import {
   localhost,
   defaultExpectedResponseTime,

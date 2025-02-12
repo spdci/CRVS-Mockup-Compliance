@@ -1,7 +1,7 @@
 {
     "uuid": "e94a4170-6ef6-4b0a-978d-be91893e9a64",
     "lastMigration": 27,
-    "name": "PaymentsBBVoucherAPI",
+    "name": "CRVSInteroperability",
     "endpointPrefix": "",
     "latency": 0,
     "port": 3003,
@@ -103,7 +103,7 @@
         "uuid": "003b7340-926b-4b8b-9bf4-eabdd9733dff",
         "documentation": "Async search",
         "method": "post",
-        "endpoint": "crvs/sync/async-search",
+        "endpoint": "crvs/search",
         "responses": [
           {
             "uuid": "e14155cf-b6f8-4367-2fg3-7dddba2d9c14",
@@ -136,7 +136,7 @@
         "uuid": "003b7341-926b-4b8b-9bf4-eabdd9733dff",
         "documentation": "Async on-search",
         "method": "post",
-        "endpoint": "crvs/sync/async-on-search",
+        "endpoint": "crvs/on-search",
         "responses": [
           {
             "uuid": "e14155cf-b6f8-4367-2fg3-7dddba2d9c15",

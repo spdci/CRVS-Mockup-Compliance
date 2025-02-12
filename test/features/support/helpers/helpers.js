@@ -177,3 +177,73 @@ export const regRecordsSchema = {
     }
   },
 }
+
+export const asyncsearchEndpoint = 'crvs/search';
+export const asyncsearchResponseSchema = {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const onsearchEndpoint= 'crvs/on-search';
+export const onsearchResponseSchema = {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+export const onsearchRequestSchema = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "object",
+        "properties": {
+          "transaction_id": { "type": "integer" },
+          "correlation_id": { "type": "string" },
+          "search_response": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reference_id": { "type": "string" },
+                "timestamp": { "type": "string" },
+                "status": { "type": "string", "enum": ["rcvd", "processed", "failed"] },
+                "status_reason_code": { "type": "string" },
+                "status_reason_message": { "type": "string" },
+                "data": { "type": "object" },
+                "pagination": { "type": "object" },
+                "locale": { "type": "string", "enum": ["en", "fr", "ar"] }
+              }
+            }
+          }
+        },
+        "required": ["transaction_id", "correlation_id", "search_response"]
+      }
+    },
+    "required": ["message"]
+    
+}

@@ -1,5 +1,5 @@
-@method=POST @endpoint=crvs/unsubscribe
-Feature: Unsubscribe from CRVS based on specific criteria
+@method=POST @endpoint=crvs/on-unsubscribe
+Feature: callback for Unsubscribe from CRVS
 
 This API is to be exposed by the crvs.
 It will be called by the SP systems or other registeries .

@@ -6,8 +6,9 @@ import {
   localhost,
   defaultExpectedResponseTime,
   acceptHeader,
-  asyncsearchEndpoint,
-  asyncsearchResponseSchema,
+  onsearchEndpoint,
+  onsearchResponseSchema,
+  onsearchRequestSchema
 } from './helpers/helpers.js';
 
 import chaiJsonSchema from 'chai-json-schema'; // Import correctly
@@ -17,19 +18,19 @@ chai.use(chaiString);
 
 chai.use(chaiJsonSchema); // Use the imported schema validation
 
-const baseUrl = localhost + asyncsearchEndpoint;
+const baseUrl = localhost + onsearchEndpoint;
 
-let specSearch;
+let speconSearch;
 
 
 // Given step: Initialize search for beneficiaries
-Given(/^System wants to async search for persons in crvs$/, function () {
-  specSearch = spec(); // Initialize the specSearch object
+Given(/^SP has previously sent a search request to CRVS$/, function () {
+  speconSearch = spec(); // Initialize the specSearch object
 });
 
-When(/^A POST request to async search is sent$/, async function () {
+When(/^CRVS completes processing and calls SP on-search callback$/, async function () {
   try {
-    const response = await specSearch
+    const response = await speconSearch
       .post(baseUrl)
       .withHeaders(acceptHeader.key, acceptHeader.value);
     this.response = response; // Save response for validation in Then steps
@@ -41,28 +42,33 @@ When(/^A POST request to async search is sent$/, async function () {
 
 
 // Then step: Ensure the response is received
-Then(/^The response from the async search should be received$/, async function () {
+Then(/^SP should receive the on-search response from CRVS$/, async function () {
   chai.expect(this.response).to.exist; // Uncomment once debugged
 });
 
 // Then step: Validate the response status code
-Then(/^The async search response should have status (\d+)$/, async  function(status)  {
+Then(/^The on-search response should have status (\d+)$/, async  function(status)  {
   chai.expect(this.response.statusCode).to.equal(status);
 });
 
 // Then step: Validate header in the response
-Then(/^The async search response should have "([^"]*)": "([^"]*)" header$/, async function(key, value) {
+Then(/^The on-search response should have "([^"]*)": "([^"]*)" header$/, async function(key, value) {
   chai.expect(this.response.rawHeaders).to.include(key);
   //chai.expect(this.response.rawHeaders).to.include(value);
 });
 
 // Then step: Validate response time
-Then(/^The async search response should be returned in a timely manner within 15000ms$/, async function() {
+Then(/^The on-search response should be received within 15000ms$/, async function() {
     chai.expect(this.response.responseTime).to.be.lessThan(defaultExpectedResponseTime);
     //this.response.to.have.responseTimeLessThan(defaultExpectedResponseTime);
   });
 
 // Then step: Validate JSON schema of the response
-Then(/^The async search response should match the expected JSON schema$/, async  function() {
-  chai.expect(this.response.body).to.be.jsonSchema(asyncsearchResponseSchema);
+Then(/^The on-search response should match the expected JSON schema$/, async  function() {
+  chai.expect(this.response.body).to.be.jsonSchema(onsearchResponseSchema);
+});
+
+// Then step: Validate JSON schema of the request
+Then(/^The on-search request body should match the expected JSON structure$/, async  function() {
+  chai.expect(this.response.body).to.be.jsonSchema(onsearchRequestSchema);
 });
