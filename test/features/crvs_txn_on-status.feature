@@ -1,15 +1,15 @@
-@method=POST @endpoint=crvs/txn/status
+@method=POST @endpoint=crvs/txn/on-status
 Feature: Get transaction status
 
 This API is to be exposed by the CRVS.
 It will be called by the SP systems or other registries.
 
     @smoke
-    Scenario: Successfully get transaction status
-        Given System wants to get transaction status
-        When A POST request to txn status is sent
-        Then The response from the getting txn status should be received
-        And The txn status response should have status 200
-        And The txn status response should have "Content-Type": "application/json" header
-        And The txn status response should be returned in a timely manner within 15000ms
-        And The txn status response should match the expected JSON schema
+    Scenario: Successfully receive async txn status result from CRVS
+        Given SP has previously sent a txn status request to CRVS
+        When CRVS completes processing and calls SP txn on-status callback
+        Then SP should receive the txn on-status response from CRVS
+        And The txn on-status response should have status 200
+        And The txn on-status response should have "Content-Type": "application/json" header
+        And The txn on-status response should be returned in a timely manner 15000ms
+        And The txn on-status response should match json schema

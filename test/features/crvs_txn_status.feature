@@ -1,5 +1,5 @@
 @method=POST @endpoint=crvs/txn/status
-Feature: Get transaction status
+Feature: Get transaction status async
 
 This API is to be exposed by the CRVS.
 It will be called by the SP systems or other registries.

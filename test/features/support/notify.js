@@ -6,8 +6,8 @@ import {
   localhost,
   defaultExpectedResponseTime,
   acceptHeader,
-  subscribeEndpoint,
-  subscribeResponseSchema,
+  notifyEndpoint,
+  notifyResponseSchema
 } from './helpers/helpers.js';
 
 import chaiJsonSchema from 'chai-json-schema'; // Import correctly
@@ -17,24 +17,22 @@ chai.use(chaiString);
 
 chai.use(chaiJsonSchema); // Use the imported schema validation
 
-const baseUrl = localhost + subscribeEndpoint;
-const endpointTag = { tags: `@endpoint=/${subscribeEndpoint}` };
+const baseUrl = localhost + notifyEndpoint;
 
-let specSubscribe;
+let specnotify;
 
 
 // Given step: Initialize search for beneficiaries
-Given(/^SP has previously sent a subscribe request to CRVS$/, function () {
-  specSubscribe = spec(); // Initialize the specSearch object
+Given(/^System previously subscribed to notification of new birth$/, function () {
+  specnotify = spec(); // Initialize the specSearch object
 });
 
-When(/^CRVS completes processing and calls SP on-subscribe callback$/, async function () {
+When(/^CRVS send notification to subscriber for new birth$/, async function () {
   try {
-    const response = await specSubscribe
+    const response = await specnotify
       .post(baseUrl)
       .withHeaders(acceptHeader.key, acceptHeader.value);
     this.response = response; // Save response for validation in Then steps
-
   } catch (err) {
     console.error("Request failed", err);
     throw err;
@@ -43,30 +41,28 @@ When(/^CRVS completes processing and calls SP on-subscribe callback$/, async fun
 
 
 // Then step: Ensure the response is received
-Then(/^SP should receive the on-subscribe response from CRVS$/, async function () {
+Then(/^The response from the notify is received$/, async function () {
   chai.expect(this.response).to.exist; // Uncomment once debugged
 });
 
-
 // Then step: Validate the response status code
-Then(/^The on-subscribe response should have status (\d+)$/, async  function(status)  {
+Then(/^The notify response should have status (\d+)$/, async  function(status)  {
   chai.expect(this.response.statusCode).to.equal(status);
 });
 
 // Then step: Validate header in the response
-Then(/^The on-subscribe response should have "([^"]*)": "([^"]*)" header$/, async function(key, value) {
+Then(/^The notify response should have "([^"]*)": "([^"]*)" header$/, async function(key, value) {
   chai.expect(this.response.rawHeaders).to.include(key);
   //chai.expect(this.response.rawHeaders).to.include(value);
 });
 
 // Then step: Validate response time
-Then(
-  /^The on-subscribe response should be returned in a timely manner 15000ms$/, async function() {
+Then(/^The notify response should be returned in a timely manner within 15000ms$/, async function() {
     chai.expect(this.response.responseTime).to.be.lessThan(defaultExpectedResponseTime);
     //this.response.to.have.responseTimeLessThan(defaultExpectedResponseTime);
   });
 
 // Then step: Validate JSON schema of the response
-Then(/^The on-subscribe response should match json schema$/, async  function() {
-  chai.expect(this.response.body).to.be.jsonSchema(subscribeResponseSchema);
+Then(/^The notify response should match the expected JSON schema$/, async  function() {
+  chai.expect(this.response.body).to.be.jsonSchema(txnResponseSchema);
 });
