@@ -64,5 +64,5 @@ Then(/^The notify response should be returned in a timely manner within 15000ms$
 
 // Then step: Validate JSON schema of the response
 Then(/^The notify response should match the expected JSON schema$/, async  function() {
-  chai.expect(this.response.body).to.be.jsonSchema(txnResponseSchema);
+  chai.expect(this.response.body).to.be.jsonSchema(notifyResponseSchema);
 });

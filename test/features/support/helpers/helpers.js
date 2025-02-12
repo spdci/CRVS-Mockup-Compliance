@@ -50,8 +50,6 @@ export const searchResponseSchema = {
   }
 }
 
-
-
 export const subscribeEndpoint = 'crvs/subscribe'
 export const subscribeResponseSchema = {
   type: 'object',
@@ -247,3 +245,117 @@ export const onsearchRequestSchema = {
     "required": ["message"]
     
 }
+
+export const onsubscribeEndpoint = 'crvs/on-subscribe';
+export const onsubscribeResponseSchema =  {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const onunsubscribeEndpoint = 'crvs/on-unsubscribe';
+export const onunsubscribeResponseSchema =  {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const txnstatusEndpoint = 'crvs/sync/txn/status';
+export const txstatusResponseSchema =  {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const asynctxnstatusEndpoint = 'crvs/txn/status';
+export const asynctxnstatusResponseSchema =  {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const ontxnstatusEndpoint = 'crvs/txn/on-status';
+export const ontxnstatusResponseSchema =  {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const notifyEndpoint = 'crvs/notify';
+export const notifyResponseSchema =  {
+  type: 'object',
+  required: ['message'],
+  properties: {
+    message: {
+      type: 'object',
+      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      properties: {
+        ack_status: { type: 'string' },
+        timestamp: { type: 'string' },
+        error: { type: 'object' },
+        correlation_id: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+};
