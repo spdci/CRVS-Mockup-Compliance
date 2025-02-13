@@ -6,8 +6,8 @@ import {
   localhost,
   defaultExpectedResponseTime,
   acceptHeader,
-  onstatusEndpoint,
-  onstatusResponseSchema
+  ontxnstatusEndpoint,
+  ontxnstatusResponseSchema
 } from './helpers/helpers.js';
 
 import chaiJsonSchema from 'chai-json-schema'; // Import correctly
@@ -17,14 +17,14 @@ chai.use(chaiString);
 
 chai.use(chaiJsonSchema); // Use the imported schema validation
 
-const baseUrl = localhost + onstatusEndpoint;
+const baseUrl = localhost + ontxnstatusEndpoint;
 
 let spectxn;
 
 
 // Given step: Initialize search for beneficiaries
 Given(/^SP has previously sent a txn status request to CRVS$/, function () {
-  specSearch = spec(); // Initialize the specSearch object
+  spectxn = spec(); // Initialize the spectxn object
 });
 
 When(/^CRVS completes processing and calls SP txn on-status callback$/, async function () {
@@ -57,16 +57,12 @@ Then(/^The txn on-status response should have "([^"]*)": "([^"]*)" header$/, asy
 });
 
 // Then step: Validate response time
-Then(/^The txn on-status response should be returned in a timely manner within 15000ms$/, async function() {
+Then(/^The txn on-status response should be returned in a timely manner 15000ms$/, async function() {
     chai.expect(this.response.responseTime).to.be.lessThan(defaultExpectedResponseTime);
     //this.response.to.have.responseTimeLessThan(defaultExpectedResponseTime);
   });
 
 // Then step: Validate JSON schema of the response
-Then(/^The txn on-status response should match the expected JSON schema$/, async  function() {
-  chai.expect(this.response.body).to.be.jsonSchema(onstatusResponseSchema);
-  //console.log(this.response.body.data.reg_records)
-  //this.response.body.data.reg_records.forEach((jsonResponse, index) => {
-   // chai.expect(jsonResponse).to.be.jsonSchema(regRecordsSchema, `Failed at index ${index}`);
-  //});
+Then(/^The txn on-status response should match json schema$/, async  function() {
+  chai.expect(this.response.body).to.be.jsonSchema(ontxnstatusResponseSchema);
 });

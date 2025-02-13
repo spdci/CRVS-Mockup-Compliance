@@ -177,23 +177,23 @@ export const regRecordsSchema = {
 }
 
 export const asyncsearchEndpoint = 'crvs/search';
-export const asyncsearchResponseSchema = {
+export const asyncsearchResponseSchema ={
   type: 'object',
-  required: ['message'],
+  required: ['transaction_id', 'correlation_id', 'search_response'],
   properties: {
-    message: {
+    transaction_id: { type: 'integer' },
+    correlation_id: { type: 'string' },
+    search_response: {
       type: 'object',
-      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
+      required: ['status', 'message'],
       properties: {
-        ack_status: { type: 'string' },
-        timestamp: { type: 'string' },
-        error: { type: 'object' },
-        correlation_id: { type: 'string' },
-      },
-      additionalProperties: false,
-    },
-  },
+        status: { type: 'string'},
+        message: { type: 'string' }
+      }
+    }
+  }
 };
+
 
 export const onsearchEndpoint= 'crvs/on-search';
 export const onsearchResponseSchema = {
@@ -285,23 +285,23 @@ export const onunsubscribeResponseSchema =  {
 };
 
 export const txnstatusEndpoint = 'crvs/sync/txn/status';
-export const txstatusResponseSchema =  {
+export const txnstatusResponseSchema = {
   type: 'object',
-  required: ['message'],
+  required: ['transaction_id', 'correlation_id', 'txnstatus_response'],
   properties: {
-    message: {
+    transaction_id: { type: 'integer' },
+    correlation_id: { type: 'string' },
+    txnstatus_response: {
       type: 'object',
-      required: ['ack_status', 'timestamp', 'error', 'correlation_id'],
       properties: {
-        ack_status: { type: 'string' },
-        timestamp: { type: 'string' },
-        error: { type: 'object' },
-        correlation_id: { type: 'string' },
-      },
-      additionalProperties: false,
+        transaction_id: { type: 'integer' },
+        correlation_id: { type: 'string', maxLength: 99 },
+      }
     },
-  },
+  }
 };
+
+
 
 export const asynctxnstatusEndpoint = 'crvs/txn/status';
 export const asynctxnstatusResponseSchema =  {

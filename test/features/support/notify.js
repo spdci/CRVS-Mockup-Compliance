@@ -57,12 +57,12 @@ Then(/^The notify response should have "([^"]*)": "([^"]*)" header$/, async func
 });
 
 // Then step: Validate response time
-Then(/^The notify response should be returned in a timely manner within 15000ms$/, async function() {
+Then(/^The notify response should be returned in a timely manner 15000ms$/, async function() {
     chai.expect(this.response.responseTime).to.be.lessThan(defaultExpectedResponseTime);
     //this.response.to.have.responseTimeLessThan(defaultExpectedResponseTime);
   });
 
 // Then step: Validate JSON schema of the response
-Then(/^The notify response should match the expected JSON schema$/, async  function() {
+Then(/^The notify response should match json schema$/, async  function() {
   chai.expect(this.response.body).to.be.jsonSchema(notifyResponseSchema);
 });

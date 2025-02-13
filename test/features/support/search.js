@@ -27,12 +27,14 @@ Given(/^System wants to async search for persons in crvs$/, function () {
   specSearch = spec(); // Initialize the specSearch object
 });
 
-When(/^A POST request to async search is sent$/, async function () {
+When(/^A POST request to async search is sent$/, { timeout: 10000 },async function () {
   try {
+    console.log(baseUrl)
     const response = await specSearch
       .post(baseUrl)
       .withHeaders(acceptHeader.key, acceptHeader.value);
     this.response = response; // Save response for validation in Then steps
+    console.log(this.response)
   } catch (err) {
     console.error("Request failed", err);
     throw err;

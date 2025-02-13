@@ -6,8 +6,8 @@ import {
   localhost,
   defaultExpectedResponseTime,
   acceptHeader,
-  synctxnEndpoint,
-  txnResponseSchema
+  txnstatusEndpoint,
+  txnstatusResponseSchema
 } from './helpers/helpers.js';
 
 import chaiJsonSchema from 'chai-json-schema'; // Import correctly
@@ -17,19 +17,19 @@ chai.use(chaiString);
 
 chai.use(chaiJsonSchema); // Use the imported schema validation
 
-const baseUrl = localhost + synctxnEndpoint;
+const baseUrl = localhost + txnstatusEndpoint;
 
 let spectxn;
 
 
 // Given step: Initialize search for beneficiaries
 Given(/^System wants to get transaction status synchronously$/, function () {
-  specSearch = spec(); // Initialize the specSearch object
+  spectxn = spec(); // Initialize the specSearch object
 });
 
 When(/^A POST request to sync txn status is sent$/, async function () {
   try {
-    const response = await specSearch
+    const response = await spectxn
       .post(baseUrl)
       .withHeaders(acceptHeader.key, acceptHeader.value);
     this.response = response; // Save response for validation in Then steps
@@ -41,7 +41,7 @@ When(/^A POST request to sync txn status is sent$/, async function () {
 
 
 // Then step: Ensure the response is received
-Then(/^The response from the getting txn status should be received$/, async function () {
+Then(/^The response from the getting sync txn status should be received$/, async function () {
   chai.expect(this.response).to.exist; // Uncomment once debugged
 });
 
@@ -51,7 +51,7 @@ Then(/^The sync txn status response should have status (\d+)$/, async  function(
 });
 
 // Then step: Validate header in the response
-Then(/^he sync txn status response should have "([^"]*)": "([^"]*)" header$/, async function(key, value) {
+Then(/^The sync txn status response should have "([^"]*)": "([^"]*)" header$/, async function(key, value) {
   chai.expect(this.response.rawHeaders).to.include(key);
   //chai.expect(this.response.rawHeaders).to.include(value);
 });
@@ -64,5 +64,5 @@ Then(/^The sync txn status response should be returned in a timely manner within
 
 // Then step: Validate JSON schema of the response
 Then(/^The sync txn status response should match the expected JSON schema$/, async  function() {
-  chai.expect(this.response.body).to.be.jsonSchema(txnResponseSchema);
+  chai.expect(this.response.body).to.be.jsonSchema(txnstatusResponseSchema);
 });

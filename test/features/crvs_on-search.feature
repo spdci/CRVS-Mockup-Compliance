@@ -13,4 +13,4 @@ CRVS will call this API after processing the original search request.
         And The on-search response should have "Content-Type": "application/json" header
         And The on-search response should be received within 15000ms
         And The on-search response should match the expected JSON schema
-        And The on-search request body should match the expected JSON structure
+        

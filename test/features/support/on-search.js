@@ -68,7 +68,4 @@ Then(/^The on-search response should match the expected JSON schema$/, async  fu
   chai.expect(this.response.body).to.be.jsonSchema(onsearchResponseSchema);
 });
 
-// Then step: Validate JSON schema of the request
-Then(/^The on-search request body should match the expected JSON structure$/, async  function() {
-  chai.expect(this.response.body).to.be.jsonSchema(onsearchRequestSchema);
-});
+

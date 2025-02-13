@@ -6,8 +6,8 @@ import {
   localhost,
   defaultExpectedResponseTime,
   acceptHeader,
-  txnEndpoint,
-  txnResponseSchema
+  asynctxnstatusEndpoint,
+  asynctxnstatusResponseSchema
 } from './helpers/helpers.js';
 
 import chaiJsonSchema from 'chai-json-schema'; // Import correctly
@@ -17,19 +17,19 @@ chai.use(chaiString);
 
 chai.use(chaiJsonSchema); // Use the imported schema validation
 
-const baseUrl = localhost + txnEndpoint;
+const baseUrl = localhost + asynctxnstatusEndpoint;
 
 let spectxn;
 
 
 // Given step: Initialize search for beneficiaries
-Given(/^System wants to get transaction status synchronously$/, function () {
-  specSearch = spec(); // Initialize the specSearch object
+Given(/^System wants to get transaction status$/, function () {
+  spectxn = spec(); // Initialize the specSearch object
 });
 
-When(/^A POST request to sync txn status is sent$/, async function () {
+When(/^A POST request to txn status is sent$/, async function () {
   try {
-    const response = await specSearch
+    const response = await spectxn
       .post(baseUrl)
       .withHeaders(acceptHeader.key, acceptHeader.value);
     this.response = response; // Save response for validation in Then steps
@@ -64,5 +64,5 @@ Then(/^The txn status response should be returned in a timely manner within 1500
 
 // Then step: Validate JSON schema of the response
 Then(/^The txn status response should match the expected JSON schema$/, async  function() {
-  chai.expect(this.response.body).to.be.jsonSchema(txnResponseSchema);
+  chai.expect(this.response.body).to.be.jsonSchema(asynctxnstatusResponseSchema);
 });
