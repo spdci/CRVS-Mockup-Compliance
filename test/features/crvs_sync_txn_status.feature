@@ -1,15 +1,63 @@
 @method=POST @endpoint=crvs/sync/txn/status
-Feature: Get transaction status synchronously 
+Feature: Synchronous transaction status check (POST /registry/sync/txn/status)
 
-This API is to be exposed by the CRVS.
-It will be called by the SP systems or other registries.
+This API is exposed by the CRVS and called by SP systems or other registries.
+The response carries a callback header (action "txn-on-status") and a
+TxnStatusResponse whose txn_status matches the requested txn_type.
 
-    @smoke
-    Scenario: Successfully get transaction status synchronously
-        Given System wants to get transaction status synchronously
-        When A POST request to sync txn status is sent
-        Then The response from the getting sync txn status should be received
-        And The sync txn status response should have status 200
-        And The sync txn status response should have "Content-Type": "application/json" header
-        And The sync txn status response should be returned in a timely manner within 15000ms
-        And The sync txn status response should match the expected JSON schema
+  Background:
+    Given the "sync txn status" endpoint
+
+  @smoke
+  Scenario: Successfully get the status of a search transaction
+    Given a transaction status request for "search" transactions by "transaction_id"
+    Then the request should be a valid "txn-status" message
+    When the request is sent
+    Then the HTTP status should be 200
+    And the response should have a JSON content type
+    And the response should be received within 15000 ms
+    And the response should be a valid "sync-txn-status-response" message
+    And the transaction status should be reported for a "search" transaction
+    And every returned person record should be valid CRVS person data
+
+  @functional
+  Scenario Outline: Status of a <txn type> transaction looked up by <attribute type>
+    Given a transaction status request for "<txn type>" transactions by "<attribute type>"
+    Then the request should be a valid "txn-status" message
+    When the request is sent
+    Then the response should be a valid "sync-txn-status-response" message
+    And the transaction status should be reported for a "<txn type>" transaction
+    And every returned person record should be valid CRVS person data
+
+    Examples:
+      | txn type    | attribute type         |
+      | search      | transaction_id         |
+      | search      | reference_id_list      |
+      | search      | correlation_id         |
+      | subscribe   | transaction_id         |
+      | subscribe   | subscription_code_list |
+      | unsubscribe | subscription_code_list |
+      | unsubscribe | correlation_id         |
+
+  @negative
+  Scenario Outline: An invalid sync transaction status request is rejected: <case>
+    Given a valid request
+    And the request field "<field>" becomes '<value>'
+    When the request is sent
+    Then the request should be rejected according to the DCI error model
+
+    Examples:
+      | case                               | field                                       | value               |
+      | missing header                     | header                                      | <removed>           |
+      | wrong action                       | header.action                               | "search"            |
+      | missing message                    | message                                     | <removed>           |
+      | missing transaction_id             | message.transaction_id                      | <removed>           |
+      | unknown txn_type                   | message.txnstatus_request.txn_type          | "disburse"          |
+      | unknown attribute_type             | message.txnstatus_request.attribute_type    | "uin"               |
+      | missing attribute_value            | message.txnstatus_request.attribute_value   | <removed>           |
+      | subscription_code_list given a string | message.txnstatus_request                | {"reference_id":"R1","txn_type":"subscribe","attribute_type":"subscription_code_list","attribute_value":"SUB-1"} |
+
+  @negative
+  Scenario: A body that is not JSON is rejected
+    When the raw body "<xml/>" is sent
+    Then the request should be rejected according to the DCI error model
