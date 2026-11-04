@@ -226,7 +226,7 @@ export function validateMessage(kind, body, request) {
   const header = body.header;
   const message = body.message;
   const encrypted = header?.is_msg_encrypted === true;
-  const isCallback = ['on-search', 'notify', 'txn-on-status', 'sync-search-response', 'sync-txn-status-response'].includes(kind);
+  const isCallback = ['on-search', 'on-subscribe', 'on-unsubscribe', 'notify', 'txn-on-status', 'sync-search-response', 'sync-txn-status-response'].includes(kind);
 
   if (isCallback) {
     errors.push(...checkCallbackHeaderRules(header).map((e) => `[rule] ${e}`));

@@ -42,7 +42,7 @@ export function defaultMessage(endpointName) {
   }
 }
 
-const usesCallbackHeader = new Set(['on-search', 'notify', 'txn on-status']);
+const usesCallbackHeader = new Set(['on-search', 'on-subscribe', 'on-unsubscribe', 'notify', 'txn on-status']);
 
 export function buildRequest(endpointName, message = defaultMessage(endpointName)) {
   const { action } = endpoints[endpointName];

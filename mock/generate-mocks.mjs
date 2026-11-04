@@ -118,17 +118,6 @@ const callbackHeader = (action, countPath) => `{
     "is_msg_encrypted": false
   }`;
 
-const msgHeader = (action, countPath) => `{
-    "version": "1.0.0",
-    "message_id": "{{guid}}",
-    "message_ts": "${NOW}",
-    "action": "${action}",
-    "sender_id": "${CRVS_ID}",
-    "receiver_id": "{{bodyRaw 'header.sender_id'}}",
-    "total_count": ${countPath ? `{{len (bodyRaw '${countPath}')}}` : 1},
-    "is_msg_encrypted": false
-  }`;
-
 const onSearchBody = `{
   "header": ${callbackHeader('on-search', 'message.search_request')},
   "message": ${searchMessage}
@@ -360,9 +349,9 @@ const crvsSchemas = Object.fromEntries(['search', 'subscribe', 'unsubscribe', 't
 const crvsCallbacks = [
   callback('crvs', 'on-search', 'Async search results sent to header.sender_uri', onSearchBody),
   callback('crvs', 'on-subscribe', 'Subscription result sent to header.sender_uri',
-    `{\n  "header": ${msgHeader('on-subscribe', 'message.subscribe_request')},\n  "message": ${subscribeMessage}\n}`),
+    `{\n  "header": ${callbackHeader('on-subscribe', 'message.subscribe_request')},\n  "message": ${subscribeMessage}\n}`),
   callback('crvs', 'on-unsubscribe', 'Unsubscribe result sent to header.sender_uri',
-    `{\n  "header": ${msgHeader('on-unsubscribe')},\n  "message": ${unsubscribeMessage}\n}`),
+    `{\n  "header": ${callbackHeader('on-unsubscribe')},\n  "message": ${unsubscribeMessage}\n}`),
   callback('crvs', 'txn-on-status', 'Transaction status sent to header.sender_uri',
     `{\n  "header": ${callbackHeader('txn-on-status')},\n  "message": ${txnStatusMessage}\n}`),
 ];
