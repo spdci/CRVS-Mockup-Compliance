@@ -520,6 +520,18 @@
     {
       "key": "Content-Type",
       "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
     }
   ],
   "proxyReqHeaders": [
@@ -584,7 +596,7 @@
         }
       ],
       "bodyType": "INLINE",
-      "body": "{\n  \"header\": {\n    \"version\": \"1.0.0\",\n    \"message_id\": \"{{guid}}\",\n    \"message_ts\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n    \"action\": \"on-subscribe\",\n    \"sender_id\": \"crvs.example.org\",\n    \"receiver_id\": \"{{bodyRaw 'header.sender_id'}}\",\n    \"total_count\": {{len (bodyRaw 'message.subscribe_request')}},\n    \"is_msg_encrypted\": false\n  },\n  \"message\": {\n    \"transaction_id\": \"{{bodyRaw 'message.transaction_id'}}\",\n    \"correlation_id\": \"{{guid}}\",\n    \"subscribe_response\": [\n      {{#each (bodyRaw 'message.subscribe_request')}}\n      {\n        \"reference_id\": \"{{this.reference_id}}\",\n        \"timestamp\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n        \"status\": \"succ\",\n        \"subscriptions\": [\n          {\n            \"version\": \"1.0.0\",\n            \"code\": \"SUB-{{guid}}\",\n            \"status\": \"subscribe\",\n            \"timestamp\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n            \"reg_type\": \"{{#if this.subscribe_criteria.reg_type}}{{this.subscribe_criteria.reg_type}}{{else}}ns:org:RegistryType:Civil{{/if}}\",\n            \"reg_event_type\": \"{{this.subscribe_criteria.reg_event_type}}\",\n            {{#if this.subscribe_criteria.frequency}}\"frequency\": {{{stringify this.subscribe_criteria.frequency}}},{{/if}}\n            {{#if this.subscribe_criteria.filter_type}}\"filter_type\": \"{{this.subscribe_criteria.filter_type}}\",{{/if}}\n            \"filter\": {{{stringify this.subscribe_criteria.filter}}},\n            \"notify_record_type\": \"{{this.subscribe_criteria.notify_record_type}}\",\n            \"locale\": \"{{#if this.locale}}{{this.locale}}{{else}}eng{{/if}}\"\n          }\n        ],\n        \"locale\": \"{{#if this.locale}}{{this.locale}}{{else}}eng{{/if}}\"\n      }{{#unless @last}},{{/unless}}\n      {{/each}}\n    ]\n  }\n}",
+      "body": "{\n  \"header\": {\n    \"version\": \"1.0.0\",\n    \"message_id\": \"{{guid}}\",\n    \"message_ts\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n    \"action\": \"on-subscribe\",\n    \"status\": \"succ\",\n    \"total_count\": {{len (bodyRaw 'message.subscribe_request')}},\n    \"completed_count\": {{len (bodyRaw 'message.subscribe_request')}},\n    \"sender_id\": \"crvs.example.org\",\n    \"receiver_id\": \"{{bodyRaw 'header.sender_id'}}\",\n    \"is_msg_encrypted\": false\n  },\n  \"message\": {\n    \"transaction_id\": \"{{bodyRaw 'message.transaction_id'}}\",\n    \"correlation_id\": \"{{guid}}\",\n    \"subscribe_response\": [\n      {{#each (bodyRaw 'message.subscribe_request')}}\n      {\n        \"reference_id\": \"{{this.reference_id}}\",\n        \"timestamp\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n        \"status\": \"succ\",\n        \"subscriptions\": [\n          {\n            \"version\": \"1.0.0\",\n            \"code\": \"SUB-{{guid}}\",\n            \"status\": \"subscribe\",\n            \"timestamp\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n            \"reg_type\": \"{{#if this.subscribe_criteria.reg_type}}{{this.subscribe_criteria.reg_type}}{{else}}ns:org:RegistryType:Civil{{/if}}\",\n            \"reg_event_type\": \"{{this.subscribe_criteria.reg_event_type}}\",\n            {{#if this.subscribe_criteria.frequency}}\"frequency\": {{{stringify this.subscribe_criteria.frequency}}},{{/if}}\n            {{#if this.subscribe_criteria.filter_type}}\"filter_type\": \"{{this.subscribe_criteria.filter_type}}\",{{/if}}\n            \"filter\": {{{stringify this.subscribe_criteria.filter}}},\n            \"notify_record_type\": \"{{this.subscribe_criteria.notify_record_type}}\",\n            \"locale\": \"{{#if this.locale}}{{this.locale}}{{else}}eng{{/if}}\"\n          }\n        ],\n        \"locale\": \"{{#if this.locale}}{{this.locale}}{{else}}eng{{/if}}\"\n      }{{#unless @last}},{{/unless}}\n      {{/each}}\n    ]\n  }\n}",
       "databucketID": "",
       "filePath": "",
       "sendFileAsBody": true
@@ -603,7 +615,7 @@
         }
       ],
       "bodyType": "INLINE",
-      "body": "{\n  \"header\": {\n    \"version\": \"1.0.0\",\n    \"message_id\": \"{{guid}}\",\n    \"message_ts\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n    \"action\": \"on-unsubscribe\",\n    \"sender_id\": \"crvs.example.org\",\n    \"receiver_id\": \"{{bodyRaw 'header.sender_id'}}\",\n    \"total_count\": 1,\n    \"is_msg_encrypted\": false\n  },\n  \"message\": {\n    \"transaction_id\": \"{{bodyRaw 'message.transaction_id'}}\",\n    \"correlation_id\": \"{{guid}}\",\n    \"timestamp\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n    \"status\": \"succ\",\n    \"subscription_status\": [\n      {{#each (bodyRaw 'message.subscription_codes')}}\n      { \"code\": \"{{this}}\", \"status\": \"unsubscribe\" }{{#unless @last}},{{/unless}}\n      {{/each}}\n    ]\n  }\n}",
+      "body": "{\n  \"header\": {\n    \"version\": \"1.0.0\",\n    \"message_id\": \"{{guid}}\",\n    \"message_ts\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n    \"action\": \"on-unsubscribe\",\n    \"status\": \"succ\",\n    \"total_count\": 1,\n    \"completed_count\": 1,\n    \"sender_id\": \"crvs.example.org\",\n    \"receiver_id\": \"{{bodyRaw 'header.sender_id'}}\",\n    \"is_msg_encrypted\": false\n  },\n  \"message\": {\n    \"transaction_id\": \"{{bodyRaw 'message.transaction_id'}}\",\n    \"correlation_id\": \"{{guid}}\",\n    \"timestamp\": \"{{now \"yyyy-MM-dd'T'HH:mm:ss.SSSxxx\"}}\",\n    \"status\": \"succ\",\n    \"subscription_status\": [\n      {{#each (bodyRaw 'message.subscription_codes')}}\n      { \"code\": \"{{this}}\", \"status\": \"unsubscribe\" }{{#unless @last}},{{/unless}}\n      {{/each}}\n    ]\n  }\n}",
       "databucketID": "",
       "filePath": "",
       "sendFileAsBody": true

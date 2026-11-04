@@ -129,6 +129,28 @@ cd test && npm install && npx cucumber-js
 
 Reports are written to `test/result` (HTML, JUnit XML, Cucumber messages).
 
+### Continuous integration
+
+`.github/workflows/compliance.yml` runs on every pull request, on pushes to `main` and on demand
+(Actions > CRVS compliance > Run workflow, with an optional Cucumber tag expression):
+
+| Job | What it does |
+|---|---|
+| Compliance suite (mocks) | Checks `mockoon-*.json` are up to date with `mock/generate-mocks.mjs`, starts the mocks, runs the suite and publishes the results: the **CRVS compliance results** check (one annotation per failed scenario), a summary comment on pull requests, and the `crvs-compliance-report` artifact (HTML, JUnit XML, Cucumber messages) |
+| Docker images | Builds the mock and test-runner images and runs the suite with `docker compose`, as documented above (`crvs-compliance-report-docker` artifact) |
+| Publish report to GitHub Pages | On `main` only: publishes the site (see below) to <https://spdci.github.io/CRVS-Mockup-Compliance/>. Requires Settings > Pages > Source: **GitHub Actions** |
+
+The published site (`site/build-site.mjs`; on pull requests it is attached as the `crvs-compliance-site` artifact) has:
+
+- a landing page with the results of the latest run;
+- `report/`: the Cucumber HTML report and JUnit results;
+- `api/`: a Swagger UI with two definitions: the **DCI CRVS API v1.0.0** as published
+  (`docs/openapi/crvs_api_v1.0.0.yaml`, from spdci/api-standards `release/yaml`, commit `ce1f22c`), and the
+  **CRVS mock**, the same API on the mock paths (`/crvs/...`) and ports (3333 CRVS side, 3334 SP side). Start
+  the mocks locally and use "Try it out" to send requests to them (`api/?spec=mock` opens it directly).
+
+Build it locally with `node site/build-site.mjs --out _site --report test/result/<name>.html --junit test/result/<name>.xml`.
+
 ### Testing your own implementation
 
 | Variable | Default | Purpose |

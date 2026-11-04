@@ -808,8 +808,8 @@ export const envelopeDefinitions = {
   'unsubscribe': envelope({ headerDef: 'MsgHeader', action: 'unsubscribe', messageDef: 'UnSubscribeRequest', messageRequired: true }),
   'txn-status': envelope({ headerDef: 'MsgHeader', action: 'txn-status', messageDef: 'TxnStatusRequest', messageRequired: true }),
   'on-search': envelope({ headerDef: 'MsgCallbackHeader', action: 'on-search', messageDef: 'SearchResponse', messageRequired: false }),
-  'on-subscribe': envelope({ headerDef: 'MsgHeader', action: 'on-subscribe', messageDef: 'SubscribeResponse', messageRequired: true }),
-  'on-unsubscribe': envelope({ headerDef: 'MsgHeader', action: 'on-unsubscribe', messageDef: 'UnSubscribeResponse', messageRequired: true }),
+  'on-subscribe': envelope({ headerDef: 'MsgCallbackHeader', action: 'on-subscribe', messageDef: 'SubscribeResponse', messageRequired: true }),
+  'on-unsubscribe': envelope({ headerDef: 'MsgCallbackHeader', action: 'on-unsubscribe', messageDef: 'UnSubscribeResponse', messageRequired: true }),
   'notify': envelope({ headerDef: 'MsgCallbackHeader', action: 'notify', messageDef: 'NotifyEventRequest', messageRequired: false }),
   'txn-on-status': envelope({ headerDef: 'MsgCallbackHeader', action: 'txn-on-status', messageDef: 'TxnStatusResponse', messageRequired: false }),
 };
